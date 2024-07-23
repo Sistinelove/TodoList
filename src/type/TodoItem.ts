@@ -1,7 +1,7 @@
 export interface TodoItem {
   id: number;
   done: boolean;
-  text: string;
+  title: string;
 }
 
 export interface TodoTaskProps {

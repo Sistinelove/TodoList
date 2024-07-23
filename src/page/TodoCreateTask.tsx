@@ -11,9 +11,9 @@ const TodoCreateTask = () => {
     setValue(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addTodo(value);
+    await addTodo(value);
     setValue('');
   };
 

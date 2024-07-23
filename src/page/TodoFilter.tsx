@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useRef } from 'react';
+import { ChangeEvent, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { useAppContext } from './ContextProvider';
 

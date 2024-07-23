@@ -7,7 +7,7 @@ const TodoListItem = () => {
   const [editId, setEditId] = useState<number | null>(null);
   const [editText, setEditText] = useState('');
 
-  const filteredTodos = todos.filter((todo) => todo.text.includes(filterText));
+  const filteredTodos = todos.filter((todo) => todo.title.includes(filterText));
 
   const handleEdit = (id: number, currentText: string) => {
     setEditId(id);
@@ -32,7 +32,7 @@ const TodoListItem = () => {
           {editId === todo.id ? (
             <input type="text" value={editText} onChange={handleChangeText} />
           ) : (
-            <TodoTask done={todo.done}>{todo.text}</TodoTask>
+            <TodoTask $done={todo.done}>{todo.title}</TodoTask>
           )}
           <ContainerButtonTask>
             {editId === todo.id ? (
@@ -67,9 +67,9 @@ const ContainerButtonTask = styled.div`
   margin-left: auto;
 `;
 
-const TodoTask = styled.div<{ done: boolean }>`
+const TodoTask = styled.div<{ $done: boolean }>`
   margin: 0 10px;
-  text-decoration: ${({ done }) => (done ? 'line-through' : 'none')};
+  text-decoration: ${({ $done }) => ($done ? 'line-through' : 'none')};
 `;
 
 export default TodoListItem;

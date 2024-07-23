@@ -6,9 +6,10 @@ import { useEffect } from 'react';
 
 function App() {
   const fetchApi = async () => {
-    const response = await fetch('http://localhost:4000');
+    const response = await fetch('http://localhost:4000/todos');
     const res = await response.json();
     console.log(res);
+    return res;
   };
   useEffect(() => {
     fetchApi();
