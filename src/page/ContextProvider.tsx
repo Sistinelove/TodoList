@@ -7,7 +7,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [filterText, setFilterText] = useState('');
 
   const fetchTodos = async () => {
-    const response = await fetch('http://localhost:4000/todos');
+    const response = await fetch('http://localhost:3001/todos');
     const res = await response.json();
     setTodos(res);
   };
@@ -17,7 +17,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const addTodo = async (text: string) => {
-    const response = await fetch('http://localhost:4000/addTodo', {
+    const response = await fetch('http://localhost:3001/todos/addTodo', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: text, done: false }),
@@ -28,35 +28,46 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     const newTodo: TodoItem = await response.json();
     setTodos([...todos, newTodo]);
   };
-
-  const toggleDone = (id: number) => {
-    setTodos((prevTodos) => prevTodos.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : todo)));
-  };
-  const deleteTodo = async (id: number) => {
-    const response = await fetch(`http://localhost:4000/deleteTodo/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
-
-    if (!response.ok) {
-      console.error('Failed to delete todo');
-      return;
-    }
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
-  };
-
-  const changeTodo = async (id: number, text: string) => {
-    const response = await fetch(' http://localhost:4000/changeTodo', {
+  const toggleDone = async (id: number) => {
+    const response = await fetch(`http://localhost:3001/todos/toggle/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, text }),
+    });
+    if (!response.ok) {
+      console.error('Не получилось изменить checkbox');
+      return;
+    }
+    const updatedTodo: TodoItem = await response.json();
+    setTodos((prevTodos) => prevTodos.map((todo) => (todo.id === id ? updatedTodo : todo)));
+  };
+
+  const deleteTodo = async (id: number) => {
+    const response = await fetch(`http://localhost:3001/todos/delete/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
     });
     if (!response.ok) {
       console.error('Failed to delete todo');
       return;
     }
-    setTodos((prev) => prev.map((todo) => (todo.id === id ? { ...todo, text } : todo)));
+    const updateTodo: TodoItem = await response.json();
+    setTodos((prevTodos) => prevTodos.map((todo) => (todo.id === id ? updateTodo : todo)));
+  };
+
+  const changeTodo = async (id: number, title: string) => {
+    const response = await fetch(`http://localhost:3001/todos/changeTodo/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title }),
+    });
+    if (!response.ok) {
+      console.error('Failed to update todo');
+      return;
+    }
+    const updatedTodo: TodoItem = await response.json();
+    setTodos((prev) =>
+      prev.map((todo) => (todo.id === id ? { ...todo, title: updatedTodo.title, done: updatedTodo.done } : todo)),
+    );
   };
 
   return (

@@ -14,8 +14,8 @@ const TodoListItem = () => {
     setEditText(currentText);
   };
 
-  const handleSave = (id: number) => {
-    changeTodo(id, editText);
+  const handleSave = async (id: number) => {
+    await changeTodo(id, editText);
     setEditId(null);
     setEditText('');
   };
@@ -38,7 +38,7 @@ const TodoListItem = () => {
             {editId === todo.id ? (
               <button onClick={() => handleSave(todo.id)}>Сохранить</button>
             ) : (
-              <button onClick={() => handleEdit(todo.id, todo.text)}>Редактировать</button>
+              <button onClick={() => handleEdit(todo.id, todo.title)}>Редактировать</button>
             )}
             <button onClick={() => deleteTodo(todo.id)}>Удалить</button>
           </ContainerButtonTask>
