@@ -56,7 +56,7 @@ const TodoListProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <TodoListItemContext.Provider value={{ todos, toggleDone, deleteTodo, changeTodo }}>
+    <TodoListItemContext.Provider value={{ todos, toggleDone, deleteTodo, changeTodo, fetchTodos }}>
       {children}
     </TodoListItemContext.Provider>
   );

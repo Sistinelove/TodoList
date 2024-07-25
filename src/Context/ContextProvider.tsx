@@ -2,12 +2,15 @@ import { ReactNode, useContext } from 'react';
 import TodoFilterProvider from './ConextFilter.tsx';
 import TodoListProvider from './ContextListItem.tsx';
 import TodoCreateProvider from './ContextCreateTask.tsx';
+import TodoUpdateAllTodo from './ContextUpdateAllTodo.tsx';
 
 export const TodoProvider = ({ children }: { children: ReactNode }) => {
   return (
     <TodoFilterProvider>
       <TodoListProvider>
-        <TodoCreateProvider>{children}</TodoCreateProvider>
+        <TodoCreateProvider>
+          <TodoUpdateAllTodo>{children}</TodoUpdateAllTodo>
+        </TodoCreateProvider>
       </TodoListProvider>
     </TodoFilterProvider>
   );

@@ -2,23 +2,16 @@ import TodoFilter from './page/TodoFilter.tsx';
 import TodoListItem from './page/TodoListItem.tsx';
 import TodoCreateTask from './page/TodoCreateTask.tsx';
 import styled from 'styled-components';
+import TodoUpdateAllTodoButton from './page/TodoUpdateAllTodoButton.tsx';
 
 function App() {
-  // const fetchApi = async () => {
-  //   const response = await fetch('http://localhost:4000/todos');
-  //   const res = await response.json();
-  //   console.log(res);
-  //   return res;
-  // };
-  // useEffect(() => {
-  //   fetchApi();
-  // }, []);
   return (
     <Container>
       <TodoTitle>TodoList</TodoTitle>
       <TodoFilter />
       <TodoListItem />
       <TodoCreateTask />
+      <TodoUpdateAllTodoButton />
     </Container>
   );
 }

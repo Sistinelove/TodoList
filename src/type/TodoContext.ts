@@ -12,8 +12,12 @@ interface TodoListItem {
   deleteTodo: (id: number) => void;
   changeTodo: (id: number, text: string) => void;
   filterText: string;
+  fetchTodos: () => void;
 }
 
+interface TodoUpdateContextType {
+  refreshTodos: () => Promise<void>;
+}
 interface TodoCreateTask {
   addTodo: (text: string) => void;
 }
@@ -21,5 +25,6 @@ interface TodoCreateTask {
 const TodoListItemContext = createContext<TodoListItem | null>(null);
 const TodoCreateTaskContext = createContext<TodoCreateTask | null>(null);
 const TodoFilterContext = createContext<TodoListFilter | null>(null);
+const TodoUpdateContext = createContext<TodoUpdateContextType | null>(null);
 
-export { TodoListItemContext, TodoCreateTaskContext, TodoFilterContext };
+export { TodoListItemContext, TodoCreateTaskContext, TodoFilterContext, TodoUpdateContext };
