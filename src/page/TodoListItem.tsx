@@ -17,9 +17,18 @@ const TodoListItem = () => {
   };
 
   const handleSave = async (id: number) => {
-    await changeTodo(id, editText);
-    setEditId(null);
-    setEditText('');
+    const todo = todos.find((todo) => todo.id === id);
+    if (!todo) {
+      console.error(`Не найден ${id}`);
+      return;
+    }
+    const oldText = todo.title;
+    const userConfirmed = window.confirm(`Вы хотите перезаписать старое значение "${oldText}" на "${editText}"?`);
+    if (userConfirmed) {
+      await changeTodo(id, editText);
+      setEditId(null);
+      setEditText('');
+    }
   };
 
   const handleChangeText = (e: ChangeEvent<HTMLInputElement>) => {
