@@ -1,33 +1,19 @@
-import { ReactNode, useContext, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { TodoItem } from '../type/TodoItem';
-import TodoContext from '../type/TodoContext';
+import { TodoListItemContext } from '../type/TodoContext';
 
-export const AppContextProvider = ({ children }: { children: ReactNode }) => {
+const TodoListProvider = ({ children }: { children: ReactNode }) => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
-  const [filterText, setFilterText] = useState('');
 
   const fetchTodos = async () => {
     const response = await fetch('http://localhost:3001/todos');
     const res = await response.json();
     setTodos(res);
   };
-
   useEffect(() => {
     fetchTodos();
   }, []);
 
-  const addTodo = async (text: string) => {
-    const response = await fetch('http://localhost:3001/todos/addTodo', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: text, done: false }),
-    });
-    if (!response.ok) {
-      throw new Error('Не получилось добавить задачу в бд');
-    }
-    const newTodo: TodoItem = await response.json();
-    setTodos([...todos, newTodo]);
-  };
   const toggleDone = async (id: number) => {
     const response = await fetch(`http://localhost:3001/todos/toggle/${id}`, {
       method: 'PUT',
@@ -50,8 +36,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
       console.error('Failed to delete todo');
       return;
     }
-    const updateTodo: TodoItem = await response.json();
-    setTodos((prevTodos) => prevTodos.map((todo) => (todo.id === id ? updateTodo : todo)));
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
 
   const changeTodo = async (id: number, title: string) => {
@@ -71,14 +56,10 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <TodoContext.Provider value={{ todos, filterText, addTodo, toggleDone, deleteTodo, changeTodo, setFilterText }}>
+    <TodoListItemContext.Provider value={{ todos, toggleDone, deleteTodo, changeTodo }}>
       {children}
-    </TodoContext.Provider>
+    </TodoListItemContext.Provider>
   );
 };
 
-export function useAppContext() {
-  const context = useContext(TodoContext);
-  if (context === null) throw new Error('Use app context within provider!');
-  return context;
-}
+export default TodoListProvider;

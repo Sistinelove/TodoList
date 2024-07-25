@@ -1,9 +1,11 @@
 import styled from 'styled-components';
-import { useAppContext } from './ContextProvider';
+import { useAppContext } from '../Context/ContextProvider.tsx';
 import { ChangeEvent, useState } from 'react';
+import { TodoFilterContext, TodoListItemContext } from '../type/TodoContext.ts';
 
 const TodoListItem = () => {
-  const { todos, filterText, toggleDone, deleteTodo, changeTodo } = useAppContext();
+  const { todos, toggleDone, deleteTodo, changeTodo } = useAppContext(TodoListItemContext);
+  const { filterText } = useAppContext(TodoFilterContext);
   const [editId, setEditId] = useState<number | null>(null);
   const [editText, setEditText] = useState('');
 

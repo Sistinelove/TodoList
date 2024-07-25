@@ -1,8 +1,10 @@
 import React, { useRef } from 'react';
-import { useAppContext } from './ContextProvider.tsx';
+
+import { TodoCreateTaskContext } from '../type/TodoContext.ts';
+import { useAppContext } from '../Context/ContextProvider.tsx';
 
 const TodoCreateTask = () => {
-  const { addTodo } = useAppContext();
+  const { addTodo } = useAppContext(TodoCreateTaskContext);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

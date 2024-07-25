@@ -1,10 +1,11 @@
 import { ChangeEvent, useCallback, useRef } from 'react';
 import styled from 'styled-components';
-import { useAppContext } from './ContextProvider';
+import { useAppContext } from '../Context/ContextProvider.tsx';
+import { TodoFilterContext } from '../type/TodoContext.ts';
 
 const TodoFilter = () => {
   const refInput = useRef<HTMLInputElement>(null);
-  const { setFilterText } = useAppContext();
+  const { setFilterText } = useAppContext(TodoFilterContext);
   const handleFiltered = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setFilterText(e.target.value);

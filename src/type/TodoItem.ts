@@ -3,8 +3,3 @@ export interface TodoItem {
   done: boolean;
   title: string;
 }
-
-export interface TodoTaskProps {
-  done: boolean;
-  children: React.ReactNode;
-}
