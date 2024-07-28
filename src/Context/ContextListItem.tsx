@@ -1,58 +1,49 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { TodoItem } from '../type/TodoItem';
 import { TodoListItemContext } from '../type/TodoContext';
+import ApiClient from '../type/ApiClient.ts';
 
 const TodoListProvider = ({ children }: { children: ReactNode }) => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
 
   const fetchTodos = async () => {
-    const response = await fetch('http://localhost:3001/todos');
-    const res = await response.json();
-    setTodos(res);
+    try {
+      const res = await ApiClient.getTodos();
+      setTodos(res);
+    } catch (error) {
+      console.error('Failed to fetch todos', error);
+    }
   };
+
   useEffect(() => {
     fetchTodos();
   }, []);
 
   const toggleDone = async (id: number) => {
-    const response = await fetch(`http://localhost:3001/todos/toggle/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (!response.ok) {
-      console.error('Не получилось изменить checkbox');
-      return;
+    try {
+      const updatedTodo = await ApiClient.toggleDone(id);
+      setTodos((prevTodos) => prevTodos.map((todo) => (todo.id === id ? updatedTodo : todo)));
+    } catch (error) {
+      console.error('Failed to toggle todo', error);
     }
-    const updatedTodo: TodoItem = await response.json();
-    setTodos((prevTodos) => prevTodos.map((todo) => (todo.id === id ? updatedTodo : todo)));
   };
 
   const deleteTodo = async (id: number) => {
-    const response = await fetch(`http://localhost:3001/todos/delete/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (!response.ok) {
-      console.error('Failed to delete todo');
-      return;
+    try {
+      await ApiClient.deleteTodo(id);
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+    } catch (error) {
+      console.error('Failed to delete todo', error);
     }
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
 
   const changeTodo = async (id: number, title: string) => {
-    const response = await fetch(`http://localhost:3001/todos/changeTodo/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title }),
-    });
-    if (!response.ok) {
-      console.error('Failed to update todo');
-      return;
+    try {
+      const updatedTodo = await ApiClient.updateTodo(id, { title });
+      setTodos((prevTodos) => prevTodos.map((todo) => (todo.id === id ? updatedTodo : todo)));
+    } catch (error) {
+      console.error('Failed to update todo', error);
     }
-    const updatedTodo: TodoItem = await response.json();
-    setTodos((prev) =>
-      prev.map((todo) => (todo.id === id ? { ...todo, title: updatedTodo.title, done: updatedTodo.done } : todo)),
-    );
   };
 
   return (

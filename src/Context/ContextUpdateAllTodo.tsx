@@ -1,13 +1,17 @@
 import { ReactNode, useState } from 'react';
-import TodoListItem from '../page/TodoListItem.tsx';
 import { TodoUpdateContext } from '../type/TodoContext.ts';
+import ApiClient from '../type/ApiClient.ts';
+import { TodoItem } from '../type/TodoItem.ts';
 
 const TodoUpdateAllTodo = ({ children }: { children: ReactNode }) => {
-  const [updateTodos, setUpdateTodos] = useState<(typeof TodoListItem)[]>([]);
+  const [updateTodos, setUpdateTodos] = useState<TodoItem[]>([]);
   const refreshTodos = async () => {
-    const response = await fetch('http://localhost:3001/todos');
-    const res = await response.json();
-    setUpdateTodos(res);
+    try {
+      const res = await ApiClient.getTodos();
+      setUpdateTodos(res);
+    } catch (error) {
+      console.error('Failed to refresh', error);
+    }
   };
   return <TodoUpdateContext.Provider value={{ refreshTodos }}>{children}</TodoUpdateContext.Provider>;
 };

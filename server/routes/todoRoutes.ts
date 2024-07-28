@@ -12,7 +12,7 @@ router.get('/todos', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/todos/addTodo', async (req: Request, res: Response) => {
+router.post('/todos', async (req: Request, res: Response) => {
   const { title, done } = req.body;
   try {
     const newTodo = await prisma.todoList.create({
@@ -27,7 +27,7 @@ router.post('/todos/addTodo', async (req: Request, res: Response) => {
   }
 });
 
-router.delete('/todos/delete/:id', async (req: Request, res: Response) => {
+router.delete('/todos/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const deleteTodo = await prisma.todoList.delete({
@@ -41,7 +41,7 @@ router.delete('/todos/delete/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/todos/changeTodo/:id', async (req: Request, res: Response) => {
+router.put('/todos/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { title } = req.body;
   try {
@@ -59,7 +59,7 @@ router.put('/todos/changeTodo/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/todos/toggle/:id', async (req: Request, res: Response) => {
+router.put('/todos/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const todo = await prisma.todoList.findUnique({
